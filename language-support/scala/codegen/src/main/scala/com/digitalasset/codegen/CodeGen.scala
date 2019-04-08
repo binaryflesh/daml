@@ -96,7 +96,7 @@ object CodeGen {
   import Util.{FilePlan, WriteParams, partitionEithers}
 
   /*
-   * Given an DAML package (in sdaml format), a package name and an output
+   * Given an DAML package (in dalf format), a package name and an output
    * directory, this function writes a bunch of generated .scala files
    * to 'outputDir' that mirror the namespace of the DAML package.
    *
@@ -110,13 +110,13 @@ object CodeGen {
     cause = "either decoding a package from a file or extracting" +
       " the package interface failed")
   def generateCode(
-      sdamlFile: File,
+      dalfFile: File,
       otherDalfInputs: Seq[URL],
       packageName: String,
       outputDir: File,
       mode: Mode): Unit = {
     val errorOrRun = for {
-      interface <- decodePackageFromFile(sdamlFile, mode)
+      interface <- decodePackageFromFile(dalfFile, mode)
       dependencies <- decodePackagesFromURLs(otherDalfInputs, mode)
       combined = mode.combineInterfaces(interface, dependencies)
     } yield packageInterfaceToScalaCode(mode.Dialect(packageName, combined, outputDir))
