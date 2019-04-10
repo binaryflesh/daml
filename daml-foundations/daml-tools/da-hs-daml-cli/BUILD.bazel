@@ -38,6 +38,7 @@ da_haskell_library (
       "tasty-ant-xml",
       "tasty-hunit",
       "text",
+      "process",
       "vector",
       "xml",
       "yaml",
