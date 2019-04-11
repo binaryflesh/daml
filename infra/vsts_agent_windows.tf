@@ -14,7 +14,9 @@ data "template_file" "vsts-agent-windows-startup" {
 resource "google_compute_region_instance_group_manager" "vsts-agent-windows" {
   provider           = "google-beta"
   name               = "vsts-agent-windows"
-  base_instance_name = "vsts-agent-windows"
+  # keep the name short. windows hostnames are limited to 12(?) chars.
+  # -5 for the random postfix:
+  base_instance_name = "vsts-win"
   region             = "${local.region}"
   target_size        = 1
 
