@@ -10,22 +10,20 @@ import scalaz.\/
 class DarSpec extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks {
   behavior of Dar.getClass.getSimpleName
 
-  it should "implement Functor with proper map" in forAll(darGen[Int]) { dar =>
+  it should "implement Functor" in forAll(darGen[Int]) { dar =>
     import scalaz.Functor
-    import scalaz.syntax.functor._
 
-    implicit val sut: Functor[Dar] = Dar.darFunctor
+    val sut: Functor[Dar] = Dar.darFunctor
 
     def f(a: Int): Int = a + 100
 
-    dar.map(f) shouldBe Dar(f(dar.main), dar.dependencies.map(f))
+    sut.map(dar)(f) shouldBe Dar(f(dar.main), dar.dependencies.map(f))
   }
 
   it should "implement Traverse" in forAll(darGen[Int]) { dar =>
     import scalaz.Traverse
-    import scalaz.syntax.traverse._
 
-    implicit val sut: Traverse[Dar] = Dar.darTraverse
+    val sut: Traverse[Dar] = Dar.darTraverse
 
     def f(a: Int): Int = a + 10
 
@@ -33,12 +31,12 @@ class DarSpec extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks 
 
     def h(a: Int): String \/ Int = \/.left(s"error-$a")
 
-    val actual1: String \/ Dar[Int] = dar.traverseU(g)
+    val actual1: String \/ Dar[Int] = sut.traverseU(dar)(g)
     val expected1: String \/ Dar[Int] =
       \/.right(Dar(main = f(dar.main), dependencies = dar.dependencies.map(f)))
     actual1 shouldBe expected1
 
-    val actual2: String \/ Dar[Int] = dar.traverseU(h)
+    val actual2: String \/ Dar[Int] = sut.traverseU(dar)(h)
     val expected2: String \/ Dar[Int] = \/.left(s"error-${dar.main}") // first error
     actual2 shouldBe expected2
   }
