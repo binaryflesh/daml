@@ -10,7 +10,7 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 
 ## Install runtime dependencies
 
-choco install --yes git.install
+choco install --yes git --params "'/GitAndUnixToolsOnPath /NoShellIntegration'"
 
 # Install scoop
 iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
