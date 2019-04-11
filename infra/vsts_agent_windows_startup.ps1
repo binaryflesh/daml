@@ -2,8 +2,11 @@
 # Copyright (c) 2019 Digital Asset (Switzerland) GmbH and/or its affiliates. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+Set-StrictMode -Version latest
+$ErrorActionPreference = 'Stop'
+
 # Install scoop
-iex (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+# iex (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
 
 # Install chocolatey
 iex (New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')
@@ -15,7 +18,7 @@ choco feature enable -n=allowGlobalConfirmation
 #choco install git.install --yes --params "/GitAndUnixToolsOnPath /NoShellIntegration /NoGitLfs /SChannel"
 #choco install msys2 --yes
 #choco install powershell-core --yes
-choco install git.portable --yes
+choco install git.portable --force --debug --yes
 
 # Update the PATH with the new tools
 $oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
